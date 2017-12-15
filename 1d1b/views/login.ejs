@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <% include ./part/header %>
+
+    <script>
+    console.log('dddddddddd');
+    function onKeyDown(){
+         if(event.keyCode == 13){
+           $('#btnLogin').trigger('click');
+         }
+      }
+      $(document).ready(function(){
+        // 로그인 화면의 로그인 버튼 클릭
+        $("#btnLogin").click(function(e) {
+            var id = $.trim($("#id").val()); // 공백처리 후 값 세팅
+            var pw = $.trim($("#pw").val()); // 공백처리 후 값 세팅
+            if (id.length == ""){
+                alert("아이디 입력해주세요.");
+                $("#id").focus();
+                return false;
+            }
+            if (pw == "") {
+                alert("비밀번호를 입력해주세요.");
+                $("#pw").focus();
+                return false;
+            }
+            // 로그인 처리
+            $.ajax({
+                url: '/member/login',
+                type: 'post',
+                dataType: 'text',
+                data: {id: id, pw:pw},
+                success: function(data) {
+                    var json = JSON.parse(data);
+                    alert(json.code);
+                    if ( json.code == 1) { // 성공시
+                        location.href = "/home";
+                    }else if (json.code == -1){
+                      alert("아이디와 비밀번호를 모두 입력해주세요.");
+                      $("#id").val('').focus();
+                      $("#pw").val('');
+                    }else { // 실패시
+                        alert("로그인정보가 일치하지 않습니다.\n다시 시도해주세요.");
+                        $("#id").val('').focus();
+                        $("#pw").val('');
+                    }
+                }
+            });
+
+        });
+
+        $('#btnLoginClose').click(function(e){
+          location.href = "/home";
+        });
+
+      });
+    </script>
+
+  </head>
+
+  <body>
+    <img src="/img/bg_top.png" style="max-width: 100%; height: auto;" />
+    <br /><br />
+    <div class="container text-center">
+    <h1> Sign In </h1><br /><br />
+
+    <div id="divLogin" >
+        ID <input id="id" name="Lstdno" type="text" onKeyDown="onKeyDown();"/><br /><br />
+        PassWord <input id="pw" name="Lpw" type="password" onKeyDown="onKeyDown();"/><br /><br />
+        <button id="btnLogin" class="btn btn-lg btn-dark">sign in</button>
+        <button id="btnLoginClose"  class="btn btn-lg btn-dark">cancel</button>
+    </div>
+  </div>
+
+    <% include ./part/footer %>
+    </body>
+
+    </html>

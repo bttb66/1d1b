@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <% include ./part/header %>
+    <script>
+      $(document).ready(function(){
+        var postId = "<%=post.postId %>";
+        var writer = "<%=post.userId %>";
+        var userId = "<%=userId || ''%>";
+        // alert('userId: '+userId+' writer: '+writer);
+        if(writer == userId){
+          $('#likeBtn').hide();
+          $('#deleteBtn').click(function(e){
+            $.ajax({
+              url:"/post/delete",
+              type:"POST",
+              dataType:"json",
+              data: {postId:postId},
+              success:function(data){
+                history.go(-1);
+              }
+            });
+          });
+        }else{
+          $('#updateBtn').hide();
+          $('#deleteBtn').hide();
+          $('#likeBtn').click(function(e){
+            alert(postId);
+            $.ajax({
+              url:"/post/like",
+              type:"POST",
+              dataType:"json",
+              data: {userId:userId, postId:postId},
+              success:function(data){
+                var json = JSON.parse(data);
+                if(json.code == 1){
+                  alert('게시글을 성공적으로 담았습니다!');
+                }else{
+                  alert('게시글이 이미 담겨있습니다!');
+                }
+              }
+            });
+          });
+        }
+      });
+
+
+    </script>
+  </head>
+
+  <body>
+    <% include ./part/menu %>
+
+    <section id="top" class="services bg-primary text-white">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-lg-10 mx-auto">
+            <h1>하루 한 권</h1>
+            <hr class="small">
+          </div>
+        </div>
+      </div>
+    </section>
+    <br /><br />
+    <div class="container text-center">
+      <div class="col-lg-10 mx-auto">
+        <h1><%=post.title %></h1>
+        <hr class="middle">
+        <br><br><br>
+        <%=post.content %>
+        <br><br>
+        <input type='submit' id='likeBtn' value='담아가기' class="btn btn-dark"/><br/>
+        <input type='submit' id='updateBtn' value='update' class="btn btn-dark" onclick="location.href='/post/update?postId=<%=post.postId %>' "/>
+        <input type='submit' id='deleteBtn' value='delete' class="btn btn-dark"/>
+      </div>
+<br/><br/><br/>
+      <hr class="middle">
+      <h2>책 정보<br/></h2>
+      <h3><%=book.title %> - <%=book.writer %></h3>
+      <img id="bookImg" class="img-portfolio img-fluid" src="i<%=book.img%>">
+      <a  href='/home?bookId=<%=book.bookId%>' class="btn btn-dark">책 보러가기</a>
+    </div>
+
+  <% include ./part/footer %>
+  </body>
+
+  </html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>하루 한 권</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Custom CSS -->
+    <link href="css/stylish-portfolio.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+    <script>
+    console.log('dddddddddd');
+      $(document).ready(function(){
+
+        $(function() {
+          $("#formSignUp").validate();
+          $.extend( $.validator.messages, {
+            required: " 필수 항목입니다.",
+            equalTo: " 값이 일치하지 않습니다.",
+            email: "이메일 형식을 올바르게 입력하세요",
+            maxlength: $.validator.format( " {0}자를 넘을 수 없습니다. " ),
+            minlength: $.validator.format( " {0}자 이상 입력하세요." ),
+          } );
+        });
+
+        // 응시자 등록 화면에서 등록 버튼 클릭 - 등록처리
+        $("#btnReg").click(function(e){
+            $("#id").val($.trim($('#id').val())); // 공백처리 후 값 세팅
+            $("#pw").val($.trim($('#pw').val()));// 공백처리 후 값 세팅
+            $("#name").val($.trim($('#name').val()));// 공백처리 후 값 세팅
+            $("#email").val($.trim($('#email').val()));// 공백처리 후 값 세팅
+
+            // 등록
+            $.ajax({
+                url: '/member/signUp',
+                type: 'POST',
+                dataType: 'json',
+                data: $("#formSignUp").serializeArray(),
+                success: function(data) {
+                    if (data.code == 1) { // 성공시
+                      location.href="./index.html";
+                    } else if ( data.code == 2 ) { // 중복 데이터 존재시
+                        alert("이미 존재하는 아이디 입니다.\n다시 입력해주세요.");
+                        $("#id").focus();
+                        return false;
+                    } else { // 실패시
+                        alert("등록 중 오류가 발생했습니다.\n잠시후 이용해주세요.");
+                        location.href="./index.html";
+                    }
+                }
+            });
+        });
+
+        // 응시자 등록 화면에서 취소 버튼 클릭
+        $("#btnRegCancel").click(function(e){
+            // // 값 초기화
+            // $("#id").val('');
+            // $("#pw").val('');
+            // $("#name").val('');
+            // $("#email").val('');
+            //
+            // // $('#divInfo').hide(); // id: divInfo 감추기
+            location.href="./index.html";
+        });
+
+
+
+      });
+
+    </script>
+
+  </head>
+
+  <body>
+    <img src="./img/bg_top.png" style="max-width: 100%; height: auto;" />
+    <br /><br />
+    <div class="container text-center">
+    <h1> Sign Up </h1><br /><br />
+
+    <form id="formSignUp" >
+        ID <input id="id" name="id" type="text" minlength="5" maxlength="10" required/><br /><br />
+        PW <input id="pw" name="pw" type="password" minlength="8" maxlength="10" required/><br /><br />
+        PW 재입력 <input id="pw2" name="pw2" type="password" minlength="8" maxlength="10" equalTo="#pw" required/><br /><br />
+        Name <input id="name" name="name" type="text" required/><br /><br />
+        email <input id="email" name="email" type="email" required /><br /><br />
+        <div class="btnDiv">
+            <input id="btnReg" type="submit" class="btn btn-lg btn-dark" value="sign up">
+            <input id="btnRegCancel" type="submit" class="btn btn-lg btn-dark" value="cancel">
+        </div>
+    </form>
+
+  </div>
+
+  </body>
+
+  </html>

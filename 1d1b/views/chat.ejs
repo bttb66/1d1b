@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <% include ./part/header %>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script>
+    function onKeyDown(){
+         if(event.keyCode == 13){
+           $('#send').trigger('click');
+         }
+      }
+      $(document).ready(function(){
+
+        var id = "<%=id %>";
+        var nickname = "<%=nickname %>";
+
+        var socket = io.connect();
+        var room = "<%=book.title %>";
+
+        // $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight)
+
+        socket.emit('joinRoom', {room:room, nickname:nickname});
+        // socket.on('connect', function(data){
+        //   my_id = data;
+        //   alert('conn id:'+ data);
+        // });
+
+        $('#send').click(function(){
+          var msg = $('#msg').val().trim();
+          console.log(msg);
+          socket.emit('send_msg', {msg:msg, id:id});
+          $('#msg').val('');
+        });
+
+        socket.on('receive_msg', function(data){
+          var content = '';
+          if(id == data.id){
+            $('#chat').append('<li class="self">'+data.msg+'</li>');
+          }else{
+            let nick = data.nickname;
+            $('#chat').append('<li class="other"><span>'+nick+' :</span>'+data.msg+'</li>');
+          }
+          // $(".scroll").click(function(event){
+          //       event.preventDefault();
+          //       $('html,body').animate({scrollTop:$(this.hash).offset().top}, 500);
+          // });
+        });
+
+        socket.on('broadcast_msg', function(data){
+          $('#chat').append('<li>'+data+'<br/></li>');
+        });
+      });
+    </script>
+
+
+  </head>
+
+  <body>
+    <% include ./part/menu %>
+    <!-- <input type='hidden' id='room' value='<%=book.title %>'> -->
+    <section id="top" class="services bg-primary text-white">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-lg-10 mx-auto">
+            <h1>하루 한 권</h1>
+            <hr class="small">
+          </div>
+        </div>
+      </div>
+    </section>
+    <br /><br />
+    <div class="container text-center">
+      <div class="col-lg-10 mx-auto">
+        <h1>오늘의 책 - <%=book.title %></h1>
+        <hr class="middle">
+        <br><br>
+      </div>
+      <div class="chat-box" id="chatBox">
+        <ul id='chat'>
+
+        </ul>
+      </div>
+      <div class="container-fluid">
+      <!-- querybox-->
+       <div id="queryText" class="row">
+         <!-- <form class="form-width"> -->
+               <div class="col-xs-9">
+           <input type="text" class="form-control" placeholder="Type your Query Here" name="Cquery" id='msg' onKeyDown="onKeyDown();">
+               </div>
+               <div class="col-xs-1">
+                   &nbsp;&nbsp;<button id='send' class="btn-send" >OK</button>
+               </div>
+           <!-- </form> -->
+       </div>
+
+
+     </div>
+
+
+
+  </div>
+
+
+
+  <% include ./part/footer %>
+  </body>
+
+  </html>

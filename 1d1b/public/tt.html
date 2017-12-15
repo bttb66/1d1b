@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>소켓페이지</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+window.onload = function(){
+  var socket = io.connect();
+
+  //on --> 소켓 이벤트를 연결
+  socket.on('smart', function(data){
+    alert(data);
+  });
+
+  document.getElementById('button').onclick = function(){
+    var text = document.getElementById('text').value;
+
+    //웹소켓의 rint이벤트 발생, 데이터(text) 전송
+    socket.emit('rint', text);
+  };
+
+
+  document.getElementById('btn1').onclick = function(){
+    var room = prompt('방 이름을 입력하세요.', '');
+
+    socket.emit('join', room);
+  };
+
+  socket.on('message', function(data){
+    $('<p>'+data+'</p>').appendTo('body');
+  });
+
+  document.getElementById('btn2').onclick = function(){
+    socket.emit('message', 'socet.io room message');
+  };
+}
+
+  </script>
+</head>
+<body>
+  <input type='text' id='text' />
+  <input type='button' id='button' value='입력' />
+  <button id="btn1">방이름 입력</button>
+  <button id="btn2">emit</button>
+</body>
+</html>

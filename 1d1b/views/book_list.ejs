@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <% include ./part/header %>
+    <script>
+
+
+    </script>
+
+
+  </head>
+
+  <body>
+
+  <% include ./part/menu %>
+
+    <section id="top" class="services bg-primary text-white">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-lg-10 mx-auto">
+            <h1>하루 한 권</h1>
+            <hr class="small">
+          </div>
+        </div>
+      </div>
+    </section>
+    <br /><br />
+
+    <div class="container text-center">
+      <div class="col-lg-10 mx-auto">
+        <h1><%= kind %></h1>
+        <hr class="small">
+        <br><br>
+        <!-- <ul id="listview" data-role="listview" data-inset="true"
+                data-filter="true">
+                <li data-role="list-divider">담아온 글</li> -->
+          <% list.forEach(function (item, index) { %>
+          <!-- <li class="product" data-index="<%=index+1 %>"> -->
+
+                  <!-- <img src="/images/chrome.png" /> -->
+
+                  <center><table><tr>
+                  <td><h3><%= index+1 %></h3></td>
+                  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                  <td colspan=10><a href="/home?bookId=<%=item.bookId %>" ><h3><%= item.title %></h3></a></td></center>
+                  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                  <td><h3><%= item.writer %></h3></td>
+                </tr></table></center>
+                <hr class="middle">
+                  <!-- <span class="ui-li-count"><%= item.count %></span> -->
+              <br/>
+              <!-- <a href="#" data-icon="heart" data-index="<%= item.index %>"></a> -->
+          <!-- </li> -->
+          <% }); %>
+      </ul>
+      </div>
+    </div>
+
+  <% include ./part/footer %>
+  </body>
+
+  </html>

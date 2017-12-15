@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <% include ./part/header %>
+    <script>
+
+      $(document).ready(function(){
+        var userId = $('#userId').val();
+        var postId = $('#postId').val();
+        $('#title').val($('#oldTitle').val());
+        $('#contents').val($('#oldContents').val());
+
+        $("#btnReg").click(function(e){
+          var title = $.trim($('#title').val());
+          var contents = $.trim($('#contents').val());
+          $("#title").val(title);
+          $("#contents").val(contents);
+
+          if(!title || !contents){
+            alert("제목과 내용을 모두 입력해주세요!");
+            return false;
+          }
+          // $("#writeForm").serializeArray().push({"bookId": bookId})
+          $.ajax({
+            url:"/post/update",
+            type:"POST",
+            dataType:"json",
+            data: {postId:postId, title:title, contents:contents, userId:userId},
+            success:function(data){
+              if(data.code == 0){
+                location.href = '/member/login';
+              }else if(data.code == -1){
+                alert('자신이 작성한 글만 수정 가능합니다!');
+              }else{
+                alert('성공! , '+data.postId);
+                location.href='/post/detail?postId='+data.postId;
+              }
+            }
+          });
+        });
+
+      });
+    </script>
+
+
+  </head>
+
+  <body>
+    <% include ./part/menu %>
+    <input type="hidden" id="postId" name="postId" value="<%=post.postId %>"/>
+    <input type="hidden" id="oldTitle" name="title" value="<%=post.title %>"/>
+    <input type="hidden" id="oldContents" name="contents" value="<%=post.content %>"/>
+    <input type="hidden" id="userId" name="userId" value="<%=post.userId %>"/>
+
+    <section id="top" class="services bg-primary text-white">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-lg-10 mx-auto">
+            <h1>하루 한 권</h1>
+            <hr class="small">
+          </div>
+        </div>
+      </div>
+    </section>
+    <br /><br />
+    <div class="container text-center">
+      <div class="col-lg-10 mx-auto">
+        <h1>글쓰기</h1>
+        <hr class="middle">
+        <br><br>
+      </div>
+
+    <div id="body">
+      <form id="writeForm">
+        title:<input type="text" id="title" />
+        <br><br><br>
+        <textarea rows="10" cols="80" name="contents" id="contents"> 내용을 입력해주세요. </textarea>
+        <br><br><br>
+      </form>
+      <div class="btnDiv">
+          <input id="btnReg" type="submit" class="btn btn-lg btn-dark" value="save">
+          <input id="btnRegCancel" type="submit" class="btn btn-lg btn-dark" value="cancel">
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <% include ./part/footer %>
+  </body>
+
+  </html>

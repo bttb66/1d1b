@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <% include ./part/header %>
+    <script>
+
+      $(document).ready(function(){
+
+      });
+    </script>
+
+
+  </head>
+
+  <body>
+
+<% include ./part/menu %>
+    <section id="top" class="services bg-primary text-white">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-lg-10 mx-auto">
+            <h1>하루 한 권</h1>
+            <hr class="small">
+          </div>
+        </div>
+      </div>
+    </section>
+    <br /><br />
+    <div class="container text-center">
+
+    <div id="body">
+      <section id="book" class="portfolio">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-10 mx-auto text-center">
+              <h2><%=kind%></h2>
+              <hr class="small">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="portfolio-item">
+                    <a href="#">
+                      <img id="bookImg" class="img-portfolio img-fluid" src="img/portfolio-1.jpg">
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="portfolio-item">
+                    <h3><%=book.title %></h3><br>
+                    <%=book.sum %>
+                  </div>
+                </div>
+              </div>
+              <!-- /.row (nested) -->
+              <a href="/post?bookId=<%=book.bookId %>" class="btn btn-dark">글 쓰기</a>
+              <a href="/post/list?bookId=<%=book.bookId %>" class="btn btn-dark">글 보기</a>
+            </div>
+            <!-- /.col-lg-10 -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container -->
+      </section>
+    </div>
+
+  </div>
+
+  <% include ./part/footer %>
+</body>
+
+</html>
