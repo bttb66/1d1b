@@ -9,11 +9,11 @@ router.get('/', async(req, res) =>{
     console.log('1111111111111');
     var bookId;
     if(!req.query.bookId ){
-      bookId = 1;
+      bookId = 3;
       res.locals.kind = '오늘의 책';
     }else{
       bookId = req.query.bookId;
-      res.locals.kind = '지나간 책'
+      res.locals.kind = '또 다른 책'
     }
     var connection = await pool.getConnection();
     let query = "select * from book where bookId=?";

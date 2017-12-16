@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <% include ./part/header %>
+    <script>
+
+    function onKeyDown(){
+         if(event.keyCode == 13){
+           $('#search').trigger('click');
+         }
+      }
+    $(document).ready(function(){
+      document.body.innerHTML = document.body.innerHTML
+      .replace(/&lt;br \/&gt;/g, '<br />')
+      .replace(/&lt;b&gt;/g, '<b>')
+      .replace(/&lt;\/b&gt;/g, '</b>');
+
+      $('#search').click(function(e){
+        $('#searchKey').val($.trim($('#searchKey').val()));
+        $('#searchForm').submit();
+      });
+      // alert("<%=JSON.stringify(list[0])%>");
+      $('#regBtn').click(function(e){
+        // alert(1111111111111);
+        var index = $(this).attr('data-index');
+        alert(index);
+        $.ajax({
+          url:'/book/register',
+          type:'POST',
+          dataType:'json',
+          data: $('#item'+index).serializeArray(),
+          success : function(data){
+            if(data.code == 1){
+              let con = confirm('새로운 책이 등록되었습니다! 해당 책으로 이동하시겠습니까?');
+              if(con){
+                location.href = '/home?bookId='+data.bookId;
+              }
+            }else if (data.code == 2){
+              let con = confirm('선택하신 책은 이미 등록되어있습니다! 해당 책으로 이동하시겠습니까?');
+              if(con){
+                location.href = '/home?bookId='+data.bookId;
+              }
+            }else{
+              alert('오류 발생! 다시 시도해주세요,,');
+            }
+          }
+        });
+      });
+    });
+    </script>
+
+  </head>
+
+  <body>
+  <% include ./part/menu %>
+
+    <section id="top" class="services bg-primary text-white">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-lg-10 mx-auto">
+            <h1>하루 한 권</h1>
+            <hr class="small">
+          </div>
+        </div>
+      </div>
+    </section>
+    <br /><br />
+
+    <div class="container text-center">
+      <div class="col-lg-10 mx-auto">
+        <h1>더 많은 책</h1>
+        <hr class="small">
+
+        <div id="queryText" class="row">
+
+          <!-- <form class="form-width"> -->
+                <div class="col-xs-9">
+                  <form id='searchForm' action='/book/search' method='POST'>
+            <input type="text" class="form-control" placeholder="Type your Query Here" name="searchKey" id='searchKey' onKeyDown="onKeyDown();">
+</form>
+                </div>
+                <div class="col-xs-1">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<button id='search' class="btn-send" >search</button>
+                </div>
+            <!-- </form> -->
+        </div>
+        <br/>
+
+                <%
+                  list.forEach(function (item, index) { %>
+
+                          <table><tr>
+                          <td rowspan="3"><img src='<%=item.image[0]%>'></td>
+                          <td ><a href="<%=item.link[0] %>" ><h4><%=item.title[0] %>  -  <%=item.author[0] %></h4></a></td>
+                          <td><input type='button' id='regBtn' value='등록' class="btn btn-dark" data-index="<%=index%>"/></td>
+                        </tr>
+                      <tr> <td rowspan="2"><%=item.description[0]%></td></tr></table>
+                        <hr class="middle">
+                        <form id='item<%=index%>'>
+                          <input type='hidden' id='isbn' name='isbn' value='<%=item.isbn[0]%>'>
+                          <input type='hidden' id='title' name='title' value='<%=item.title[0]%>'>
+                          <input type='hidden' id='writer' name='writer' value='<%=item.author[0]%>'>
+                          <input type='hidden' id='sum' name='sum' value='<%=item.description[0]%>'>
+                          <input type='hidden' id='link' name='link' value='<%=item.link[0]%>'>
+                          <input type='hidden' id='img' name='img' value='<%=item.image[0]%>'>
+                        </form>
+                          <!-- <span class="ui-li-count"><%= item.count %></span> -->
+                      <br/>
+                      <!-- <a href="#" data-icon="heart" data-index="<%= item.index %>"></a> -->
+                  <!-- </li> -->
+                  <% }); %>
+
+
+      </div>
+
+    </div>
+
+  <% include ./part/footer %>
+  </body>
+
+  </html>
