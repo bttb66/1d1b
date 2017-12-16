@@ -5,6 +5,11 @@
     <% include ./part/header %>
     <script>
       $(document).ready(function(){
+        document.getElementById('bookInfo').innerHTML = document.getElementById('bookInfo').innerHTML
+        .replace(/&lt;br \/&gt;/g, '<br />')
+        .replace(/&lt;b&gt;/g, '')
+        .replace(/&lt;\/b&gt;/g, '');
+
         var postId = "<%=post.postId %>";
         var writer = "<%=post.userId %>";
         var userId = "<%=userId || ''%>";
@@ -18,6 +23,7 @@
               dataType:"json",
               data: {postId:postId},
               success:function(data){
+                alert('삭제가 완료되었습니다!');
                 history.go(-1);
               }
             });
@@ -76,10 +82,12 @@
       </div>
 <br/><br/><br/>
       <hr class="middle">
+      <div id='bookInfo'>
       <h2>책 정보<br/></h2>
       <h3><%=book.title %> - <%=book.writer %></h3>
-      <img id="bookImg" class="img-portfolio img-fluid" src="i<%=book.img%>">
+      <img id="bookImg" class="img-portfolio img-fluid" src="<%=book.img%>">
       <a  href='/home?bookId=<%=book.bookId%>' class="btn btn-dark">책 보러가기</a>
+    </div>
     </div>
 
   <% include ./part/footer %>

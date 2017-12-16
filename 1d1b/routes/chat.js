@@ -10,7 +10,7 @@ router.get('/', async (req, res) =>{
     }else{
       var connection = await pool.getConnection();
       let query = 'select * from book where bookId=?';
-      var ret = await connection.query(query, 1);
+      var ret = await connection.query(query, '8972756199 9788972756194');
       res.locals.book = ret[0];
       res.locals.nickname = req.session.name;
       res.locals.id = req.session.userId;

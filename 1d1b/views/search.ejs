@@ -10,8 +10,14 @@
            $('#search').trigger('click');
          }
       }
+    // function(id){
+    //   document.getElementById(id).innerHTML = document.getElementById(id).innerHTML
+    //   .replace(/&lt;br \/&gt;/g, '<br />')
+    //   .replace(/&lt;b&gt;/g, '')
+    //   .replace(/&lt;\/b&gt;/g, '');
+    // }
     $(document).ready(function(){
-      document.body.innerHTML = document.body.innerHTML
+      document.getElementById('searchList').innerHTML = document.getElementById('searchList').innerHTML
       .replace(/&lt;br \/&gt;/g, '<br />')
       .replace(/&lt;b&gt;/g, '<b>')
       .replace(/&lt;\/b&gt;/g, '</b>');
@@ -21,15 +27,15 @@
         $('#searchForm').submit();
       });
       // alert("<%=JSON.stringify(list[0])%>");
-      $('#regBtn').click(function(e){
+      $('input[name=regBtn]').click(function(e){
         // alert(1111111111111);
-        var index = $(this).attr('data-index');
-        alert(index);
+        var formId = 'item'+$(this).attr('data-index');
+        // alert($('#'+formId).serializeArray()[0].link);
         $.ajax({
           url:'/book/register',
           type:'POST',
           dataType:'json',
-          data: $('#item'+index).serializeArray(),
+          data: $('#'+formId).serializeArray(),
           success : function(data){
             if(data.code == 1){
               let con = confirm('새로운 책이 등록되었습니다! 해당 책으로 이동하시겠습니까?');
@@ -85,32 +91,33 @@
                 </div>
             <!-- </form> -->
         </div>
-        <br/>
 
+        <br/>
+<div id="searchList">
                 <%
                   list.forEach(function (item, index) { %>
 
                           <table><tr>
-                          <td rowspan="3"><img src='<%=item.image[0]%>'></td>
-                          <td ><a href="<%=item.link[0] %>" ><h4><%=item.title[0] %>  -  <%=item.author[0] %></h4></a></td>
-                          <td><input type='button' id='regBtn' value='등록' class="btn btn-dark" data-index="<%=index%>"/></td>
+                          <td rowspan="3"><img src='<%=item.image%>'></td>
+                          <td ><a href="<%=item.link %>" ><h4><%=item.title %>  -  <%=item.author %></h4></a></td>
+                          <td><input type='button' name='regBtn' value='등록' class="btn btn-dark" data-index="<%=index%>"/></td>
                         </tr>
-                      <tr> <td rowspan="2"><%=item.description[0]%></td></tr></table>
+                      <tr> <td rowspan="2"><%=item.description%></td></tr></table>
                         <hr class="middle">
                         <form id='item<%=index%>'>
-                          <input type='hidden' id='isbn' name='isbn' value='<%=item.isbn[0]%>'>
-                          <input type='hidden' id='title' name='title' value='<%=item.title[0]%>'>
-                          <input type='hidden' id='writer' name='writer' value='<%=item.author[0]%>'>
-                          <input type='hidden' id='sum' name='sum' value='<%=item.description[0]%>'>
-                          <input type='hidden' id='link' name='link' value='<%=item.link[0]%>'>
-                          <input type='hidden' id='img' name='img' value='<%=item.image[0]%>'>
+                          <input type='hidden' id='isbn' name='isbn' value='<%=item.isbn%>'>
+                          <input type='hidden' id='title' name='title' value='<%=item.title%>'>
+                          <input type='hidden' id='writer' name='writer' value='<%=item.author%>'>
+                          <input type='hidden' id='sum' name='sum' value='<%=item.description%>'>
+                          <input type='hidden' id='link' name='link' value='<%=item.link%>'>
+                          <input type='hidden' id='img' name='img' value='<%=item.image%>'>
                         </form>
                           <!-- <span class="ui-li-count"><%= item.count %></span> -->
                       <br/>
                       <!-- <a href="#" data-icon="heart" data-index="<%= item.index %>"></a> -->
                   <!-- </li> -->
                   <% }); %>
-
+</div>
 
       </div>
 

@@ -62,7 +62,7 @@ router.post('/signup', async(req, res) =>{
     var pwd = req.body.pw;
     var name = req.body.name;
     var email = req.body.email;
-    if(!(id && pw && name && email)){
+    if(!(id && pwd && name && email)){
       console.log('input all data');
       res.send({code: -1});
     }else{

@@ -10,6 +10,7 @@ router.get('/', async(req, res)=>{
   res.locals.bookId = req.query.bookId;
   res.render('write');
 });
+
 router.post('/', async(req, res) =>{
   try{
     console.log(222222222222);
@@ -50,7 +51,8 @@ router.post('/like', async(req, res)=>{
       var postId = req.body.postId;
       var statusCode = 0;
       let query = 'select count(*) as cnt from like_post where userId=? and postId=?';
-      var cnt = connection.query(query, [userId, postId]);
+      var cnt = await connection.query(query, [userId, postId]);
+      console.log(cnt);
       if(cnt[0].cnt == 0){
         statusCode = 1;
         let query2 = 'insert into like_post set ?';

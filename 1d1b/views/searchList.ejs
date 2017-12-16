@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./part/header %>
+    <script>
+
+    $(document).ready(function(){
+      document.body.innerHTML = document.body.innerHTML
+        .replace(/&lt;br \/&gt;/g, '<br />')
+        .replace(/&lt;/, '<')
+        .replace(/&gt;/, '>')
+        .replace(/&lt;b&gt;/g, '<b>')
+        .replace(/&lt;\/b&gt;/g, '</b>');
+
+      
+      });
+    </script>
+  </head>
+
+  <body>
+<div id='searchList'>
+          <% list.forEach(function (item, index) { %>
+
+                  <table><tr>
+                  <td rowspan="3"><img src='<%=item.image[0]%>'></td>
+                  <td ><a href="<%=item.link[0] %>" ><h4><%=item.title[0] %>  -  <%=item.author[0] %></h4></a></td>
+                  <td><input type='submit' id='regBtn' value='등록' class="btn btn-dark" data-index="<%=index%>"/></td>
+                </tr>
+              <tr> <td rowspan="2"><%=item.description[0]%></td></tr></table>
+                <hr class="middle">
+                  <!-- <span class="ui-li-count"><%= item.count %></span> -->
+              <br/>
+              <!-- <a href="#" data-icon="heart" data-index="<%= item.index %>"></a> -->
+          <!-- </li> -->
+          <% }); %>
+
+    </div>
+
+  </body>
+
+  </html>

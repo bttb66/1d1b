@@ -7,7 +7,10 @@
     <script>
 
       $(document).ready(function(){
-
+        document.getElementById('bookInfo').innerHTML = document.getElementById('bookInfo').innerHTML
+        .replace(/&lt;br \/&gt;/g, '<br />')
+        .replace(/&lt;b&gt;/g, '')
+        .replace(/&lt;\/b&gt;/g, '');
       });
     </script>
 
@@ -40,12 +43,12 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="portfolio-item">
-                    <a href="#">
-                      <img id="bookImg" class="img-portfolio img-fluid" src="img/portfolio-1.jpg">
+                    <a href="<%=book.link%>">
+                      <img id="bookImg" class="img-portfolio img-fluid" src="<%=book.img%>">
                     </a>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div id='bookInfo' class="col-md-6">
                   <div class="portfolio-item">
                     <h3><%=book.title %></h3><br>
                     <%=book.sum %>

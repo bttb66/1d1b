@@ -7,6 +7,9 @@ const apiKey = require('../config/apiKey.js');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 const qs = require('querystring');
+const X2JS= require('x2js');
+var x2js = new X2JS();
+
 
 router.get('/list', async (req, res)=>{
   try{
@@ -47,18 +50,60 @@ router.post('/search', async(req, res)=>{
    };
 
    rp(options)
+     .then(async function(parsedBody){
+      //  parser.parseString(parsedBody, function(err, result) {
+      //   console.log(result.rss.channel[0].item[0].title[0]);
+      //   res.locals.list = result.rss.channel[0].item;
+      //   res.render('search');
+      // });
+      // var result = x2js.xml2js(parsedBody);
+      //  console.log(result.rss.channel[0]);
+      var data = await parseXml(parsedBody);
+      console.log(data.rss.channel);
+      await setData(res, data);
+
+      // res.locals.list = x2js.xml2js(parsedBody).rss.channel[0].item;
+      res.render('search');
+     })
+     .catch(function (err) {
+      console.log('naver api err: ', err);
+      res.status(500).send({message:"naver api err"});
+    });
+
+});
+
+ function parseXml(data){
+  return x2js.xml2js(data);
+}
+function setData(res, data){
+  res.locals.list = data.rss.channel.item;
+}
+
+router.get('/test', async(req, res)=>{
+  var options = {
+       method: 'GET',
+       url: 'https://openapi.naver.com/v1/search/book_adv.xml?d_titl='+qs.escape(req.query.searchKey),
+       headers: {
+         'X-Naver-Client-Id': apiKey.clientId,
+         'X-Naver-Client-Secret': apiKey.clientSecret,
+         'Content-Type':'multipart/form-data'
+       }
+   };
+
+   rp(options)
      .then(function(parsedBody){
-       parser.parseString(parsedBody, function(err, result) {
-        console.log(result.rss.channel[0].item[0].title[0]);
-        res.locals.list = result.rss.channel[0].item;
-        res.render('search');
-      });
+
+        console.log(x2js.xml2js(parsedBody));
+        // res.locals.list = result.rss.channel[0].item;
+        res.send(x2js.xml2js(parsedBody));
+
 
      })
      .catch(function (err) {
       console.log('naver api err: ', err);
       res.status(500).send({message:"naver api err"});
     });
+
 });
 
 router.post('/register', async(req, res)=>{
@@ -72,6 +117,7 @@ router.post('/register', async(req, res)=>{
     if(cnt[0].cnt != 0){
       code = 2;
     }else{
+      console.log(22222222222222);
       let query2 = 'insert into book set?';
       let record = {
         bookId : bookId,
@@ -84,6 +130,7 @@ router.post('/register', async(req, res)=>{
       await connection.query(query2, record);
       code = 1;
     }
+    console.log('code : ',code);
     res.send({code:code, bookId:bookId});
   }catch(err){
     console.log('book register err : ', err.message);
@@ -92,5 +139,6 @@ router.post('/register', async(req, res)=>{
     pool.releaseConnection(connection);
   }
 });
+
 
 module.exports = router;

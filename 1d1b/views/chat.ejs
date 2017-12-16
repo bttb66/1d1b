@@ -11,6 +11,10 @@
          }
       }
       $(document).ready(function(){
+        document.getElementById('bookTitle').innerHTML = document.getElementById('bookTitle').innerHTML
+        .replace(/&lt;br \/&gt;/g, '<br />')
+        .replace(/&lt;b&gt;/g, '')
+        .replace(/&lt;\/b&gt;/g, '');
 
         var id = "<%=id %>";
         var nickname = "<%=nickname %>";
@@ -72,7 +76,7 @@
     <br /><br />
     <div class="container text-center">
       <div class="col-lg-10 mx-auto">
-        <h1>오늘의 책 - <%=book.title %></h1>
+        <h1 id="bookTitle">오늘의 책 - <%=book.title %></h1>
         <hr class="middle">
         <br><br>
       </div>

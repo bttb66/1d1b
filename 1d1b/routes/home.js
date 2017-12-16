@@ -8,8 +8,9 @@ router.get('/', async(req, res) =>{
   try{
     console.log('1111111111111');
     var bookId;
+    console.log(req.query.bookId);
     if(!req.query.bookId ){
-      bookId = 3;
+      bookId = '8972756199 9788972756194';
       res.locals.kind = '오늘의 책';
     }else{
       bookId = req.query.bookId;

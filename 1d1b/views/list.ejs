@@ -4,7 +4,12 @@
   <head>
     <% include ./part/header %>
     <script>
-
+    $(document).ready(function(){
+      document.getElementById('list').innerHTML = document.getElementById('list').innerHTML
+      .replace(/&lt;br \/&gt;/g, '<br />')
+      .replace(/&lt;b&gt;/g, '<b>')
+      .replace(/&lt;\/b&gt;/g, '</b>');
+    });
 
     </script>
 
@@ -32,6 +37,7 @@
         <h1><%= kind %></h1>
         <hr class="small">
         <br><br>
+        <div id='list'>
         <!-- <ul id="listview" data-role="listview" data-inset="true"
                 data-filter="true">
                 <li data-role="list-divider">담아온 글</li> -->
@@ -59,6 +65,7 @@
           <% }); %>
       </ul>
       </div>
+    </div>
     </div>
 
   <% include ./part/footer %>
